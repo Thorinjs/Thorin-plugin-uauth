@@ -1,0 +1,19 @@
+{
+  "name": "thorin-plugin-uauth",
+  "author": "UNLOQ Systems",
+  "version": "1.0.0",
+  "dependencies": {
+    "unloq": "latest"
+  },
+  "description": "Thorin.js UNLOQv2 UAuth",
+  "main": "index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Thorinjs/Thorin-plugin-uauth"
+  },
+  "homepage": "http://thorinjs.com",
+  "bugs": {
+    "url": "https://github.com/Thorinjs/Thorin-plugin-uauth/issues"
+  }
+}
