@@ -8,6 +8,8 @@ module.exports = function (thorin, opt, pluginName) {
   opt = thorin.util.extend({
     logger: pluginName || 'uauth',
     url: 'https://auth.unloq.io',
+    switch: true,         // Enable organisation switch
+    reauth: false,        // Enable reauth
     client_id: null,      // The UAUth client ID
     client_secret: null   // The UAuth client secret
   }, opt);
@@ -53,12 +55,10 @@ module.exports = function (thorin, opt, pluginName) {
     let data = {
       client_id: opt.client_id
     };
-    if (typeof query === 'object' && query) {
-      Object.keys(query).forEach((name) => {
-        if (name === 'client_id' || name === 'token') return;
-        data[name] = query[name];
-      });
-    }
+    Object.keys(query).forEach((name) => {
+      if (name === 'client_id' || name === 'token') return;
+      data[name] = query[name];
+    });
     let fullUrl = opt.url + path;
     try {
       let qsUrl = qs.stringify(data);
@@ -73,6 +73,13 @@ module.exports = function (thorin, opt, pluginName) {
    * Returns the redirect URL for authentication
    * */
   uauthObj.getRedirect = (query) => {
+    if (typeof query !== 'object' || !query) query = {};
+    if (opt.reauth && typeof query.reauth === 'undefined') {
+      query.reauth = 'true';
+    }
+    if (opt.switch && typeof query.switch === 'undefined') {
+      query.switch = 'organization';
+    }
     return getUrl('/login', query);
   };
 
@@ -80,6 +87,7 @@ module.exports = function (thorin, opt, pluginName) {
    * Returns the logout URL, so that the user can terminate his session.
    * */
   uauthObj.getLogout = (query) => {
+    if (typeof query !== 'object' || !query) query = {};
     return getUrl('/logout', query);
   };
 
