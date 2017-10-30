@@ -7,6 +7,7 @@ const qs = require('qs'),
 module.exports = function (thorin, opt, pluginName) {
   opt = thorin.util.extend({
     logger: pluginName || 'uauth',
+    required: true,
     url: 'https://auth.unloq.io',
     switch: true,         // Enable organisation switch
     reauth: false,        // Enable reauth
@@ -14,18 +15,20 @@ module.exports = function (thorin, opt, pluginName) {
     client_secret: null   // The UAuth client secret
   }, opt);
   const logger = thorin.logger(opt.logger);
-  if (!opt.client_id) {
-    logger.fatal('Missing Client ID');
+  if (opt.required) {
+    if (!opt.client_id) {
+      logger.fatal('Missing Client ID');
+    }
+    if (!opt.client_secret) {
+      logger.fatal(`Missing Client Secret`);
+    }
   }
-  if (!opt.client_secret) {
-    logger.fatal(`Missing Client Secret`);
-  }
-
   const apiObj = thorin.fetcher('uauthApi', opt.url + '/api');
-
-
   let uauthObj = {};
-
+  /* IF the client is disabled, we do not register anything. */
+  if (opt.required === false && !opt.client_id && !opt.client_secret) {
+    return uauthObj;
+  }
   /**
    * Generates an authorization token
    * */
