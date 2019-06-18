@@ -8,7 +8,7 @@ module.exports = function (thorin, opt, pluginName) {
   opt = thorin.util.extend({
     logger: pluginName || 'uauth',
     required: true,
-    url: 'https://auth.unloq.io',
+    url: 'https://auth-authenticator.iwelcome.com',
     switch: true,         // Enable organisation switch
     reauth: false,        // Enable reauth
     client_id: null,      // The UAUth client ID
